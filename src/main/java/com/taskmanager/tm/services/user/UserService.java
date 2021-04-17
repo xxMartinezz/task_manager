@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,6 +38,17 @@ public class UserService {
     }
 
     public Page<UserDTO> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserDTO::new);
+        return this.userRepository.findAll(pageable).map(UserDTO::new);
+    }
+
+    public Optional<UserDTO> getUserById(Long id) {
+        return this.userRepository.findById(id).map(UserDTO::new);
+    }
+
+    public void deleteUser(Long id) {
+        this.userRepository.findById(id).ifPresent(user -> {
+            this.userRepository.deleteById(id);
+            log.debug("Deleted user: {}", user);
+        });
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -44,7 +45,23 @@ public class UserController {
 
     @GetMapping("/users/all")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        Page<UserDTO> page = userService.getAllUsers(pageable);
+        Page<UserDTO> page = this.userService.getAllUsers(pageable);
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") Long id) {
+        Optional<UserDTO> user = this.userService.getUserById(id);
+        if (!user.isPresent()) {
+            throw new RequestException("There is no user with ID " + id + " ", "User");
+        }
+        return new ResponseEntity<UserDTO>(user.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "id") Long id) {
+        this.userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Delete method, deleted user id: " + id);
     }
 }

@@ -12,8 +12,6 @@ public class TmApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TmApplication.class, args);
-//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("tm_ds"); //name of persistence unit here
-//		EntityManager entityManager = factory.createEntityManager();
 	}
 
 }
