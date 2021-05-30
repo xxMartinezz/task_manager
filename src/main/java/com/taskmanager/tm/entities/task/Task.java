@@ -63,10 +63,11 @@ public class Task {
     @Column(name = "taskStatus")
     private TaskStatus taskStatus;
 
-    @OneToMany(mappedBy = "task",
+    @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Sprint> sprints;
+    @JoinColumn(name = "sprint_id", nullable = false)
+    private Sprint sprint;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,

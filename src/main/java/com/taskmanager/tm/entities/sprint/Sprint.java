@@ -22,8 +22,9 @@ public class Sprint {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id", nullable = false)
-    private Task task;
+    @OneToMany(mappedBy = "sprint",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Task> tasks;
 
 }

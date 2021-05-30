@@ -1,8 +1,11 @@
 package com.taskmanager.tm.services.dto.sprint;
 
 import com.sun.istack.NotNull;
+import com.taskmanager.tm.entities.sprint.Sprint;
 import com.taskmanager.tm.entities.task.Task;
 import lombok.*;
+
+import java.util.List;
 
 @Builder
 @Getter
@@ -17,5 +20,11 @@ public class SprintDTO {
     @NotNull
     private String name;
 
-    private Task task;
+    private List<Task> tasks;
+
+    public SprintDTO(Sprint sprint) {
+        this.id = sprint.getId();
+        this.name = sprint.getName();
+        this.tasks = sprint.getTasks();
+    }
 }
