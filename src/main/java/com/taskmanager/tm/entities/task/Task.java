@@ -44,29 +44,29 @@ public class Task {
     @Column(name = "priority")
     private Priority priority;
 
-    @Column(name = "estimatedTime")
+    @Column(name = "estimated_time")
     private String estimatedTime;
 
-    @Column(name = "deadlineDate")
+    @Column(name = "deadline_date")
     private LocalDateTime deadlineDate;
 
-    @Column(name = "reportedDate")
+    @Column(name = "reported_date")
     @CreationTimestamp
     private LocalDateTime reportedDate;
 
-    @Column(name = "lastChageDate")
+    @Column(name = "last_chage_date")
     private LocalDateTime lastChageDate;
 
-    @Column(name = "loggedTime")
+    @Column(name = "logged_time")
     private String loggedTime;
 
-    @Column(name = "taskStatus")
+    @Column(name = "task_status")
     private TaskStatus taskStatus;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "sprint_id", nullable = false)
+    @JoinColumn(name = "sprint_id")
     private Sprint sprint;
 
     @ManyToOne(

@@ -25,7 +25,7 @@ public class Attachment {
     @Column(name = "url", length = 256)
     private String url;
 
-    @Column(name = "mimeType")
+    @Column(name = "mime_type")
     private String mimeType;
 
     @NotNull
