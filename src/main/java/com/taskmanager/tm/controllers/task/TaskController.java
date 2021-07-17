@@ -43,6 +43,7 @@ public class TaskController {
     @GetMapping("/tasks/all")
     public ResponseEntity<List<TaskDTO>> getAllTasks(Pageable pageable) {
         Page<TaskDTO> page = this.taskService.getAllTasks(pageable);
+        //
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 }
