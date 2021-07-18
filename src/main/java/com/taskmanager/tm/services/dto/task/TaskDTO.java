@@ -1,6 +1,5 @@
 package com.taskmanager.tm.services.dto.task;
 
-import com.sun.istack.NotNull;
 import com.taskmanager.tm.entities.attachment.Attachment;
 import com.taskmanager.tm.entities.project.Project;
 import com.taskmanager.tm.entities.sprint.Sprint;
@@ -11,14 +10,13 @@ import com.taskmanager.tm.enums.TaskStatus;
 import com.taskmanager.tm.enums.TaskType;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @Builder
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class TaskDTO {
 

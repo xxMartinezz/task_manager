@@ -12,21 +12,15 @@ import com.taskmanager.tm.repositories.user.UserRepository;
 import com.taskmanager.tm.services.dto.task.TaskDTO;
 import com.taskmanager.tm.services.exceptions.RequestException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class TaskService {
-
-    private final Logger log = LoggerFactory.getLogger(TaskService.class);
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
