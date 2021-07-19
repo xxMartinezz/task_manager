@@ -33,6 +33,10 @@ public class Project {
         this.name = name;
     }
 
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
     @Override
     public String toString() {
         return "Project{" +

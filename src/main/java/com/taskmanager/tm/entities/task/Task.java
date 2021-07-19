@@ -1,8 +1,7 @@
 package com.taskmanager.tm.entities.task;
 
-import com.sun.istack.NotNull;
+
 import com.taskmanager.tm.entities.attachment.Attachment;
-import com.taskmanager.tm.entities.comment.Comment;
 import com.taskmanager.tm.entities.project.Project;
 import com.taskmanager.tm.entities.sprint.Sprint;
 import com.taskmanager.tm.entities.user.User;
@@ -14,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +31,8 @@ public class Task {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "task")
+    @Column(name = "task_type")
+    @Enumerated(EnumType.STRING)
     private TaskType taskType;
 
     @Column(name = "component")
@@ -42,6 +43,7 @@ public class Task {
     private String description;
 
     @Column(name = "priority")
+    @Enumerated(EnumType.STRING)
     private Priority priority;
 
     @Column(name = "estimated_time")
@@ -55,12 +57,13 @@ public class Task {
     private LocalDateTime reportedDate;
 
     @Column(name = "last_chage_date")
-    private LocalDateTime lastChageDate;
+    private LocalDateTime lastChangeDate;
 
     @Column(name = "logged_time")
     private String loggedTime;
 
     @Column(name = "task_status")
+    @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
     @ManyToOne(
@@ -71,12 +74,13 @@ public class Task {
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+                    CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "project_id")
     private Project project;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reported_user_id", nullable = false)
+    @JoinColumn(name = "reported_user_id")
     private User reportedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -87,8 +91,85 @@ public class Task {
 //    @JoinColumn(name = "comment_id")
 //    private List<Comment> comments;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "attachment_id")
     private List<Attachment> attachments;
 
+    public Task() {
+        // required for jpa
+    }
+
+    private Task(String name, TaskType taskType, String component, String description, Priority priority,
+                 String estimatedTime, LocalDateTime deadlineDate, LocalDateTime reportedDate,
+                 LocalDateTime lastChangeDate, String loggedTime, TaskStatus taskStatus) {
+        this.name = name;
+        this.taskType = taskType;
+        this.component = component;
+        this.description = description;
+        this.priority = priority;
+        this.estimatedTime = estimatedTime;
+        this.deadlineDate = deadlineDate;
+        this.reportedDate = reportedDate;
+        this.lastChangeDate = lastChangeDate;
+        this.loggedTime = loggedTime;
+        this.taskStatus = taskStatus;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String name;
+        private TaskType taskType;
+        private String component;
+        private String description;
+        private Priority priority;
+        private String estimatedTime;
+        private LocalDateTime deadlineDate;
+
+        private Builder() {
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withTaskType(TaskType taskType) {
+            this.taskType = taskType;
+            return this;
+        }
+
+        public Builder withComponent(String component) {
+            this.component = component;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder withPriority(Priority priority) {
+            this.priority = priority;
+            return this;
+        }
+
+        public Builder withEstimatedTime(String estimatedTime) {
+            this.estimatedTime = estimatedTime;
+            return this;
+        }
+
+        public Builder withDeadlineDate(LocalDateTime deadlineDate) {
+            this.deadlineDate = deadlineDate;
+            return this;
+        }
+
+        public Task build() {
+            LocalDateTime now = LocalDateTime.now();
+            return new Task(name, taskType, component, description, priority, estimatedTime, deadlineDate,
+                    now, now, "0", TaskStatus.NEW);
+        }
+    }
 }

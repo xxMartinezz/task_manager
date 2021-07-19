@@ -1,26 +1,11 @@
 package com.taskmanager.tm.services.dto.attachment;
 
-import com.sun.istack.NotNull;
-import com.taskmanager.tm.entities.task.Task;
-import lombok.*;
+import lombok.Value;
 
-@Builder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class AttachmentDTO {
-
-    @NotNull
-    private Long id;
-
-    private String name;
-
-    private String url;
-
-    private String mimeType;
-
-    private long size;
-
-    private Task task;
+    String name;
+    String url;
+    String mimeType;
+    long size;
 }

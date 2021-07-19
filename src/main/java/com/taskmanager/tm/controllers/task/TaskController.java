@@ -1,7 +1,7 @@
 package com.taskmanager.tm.controllers.task;
 
-import com.taskmanager.tm.entities.task.Task;
-import com.taskmanager.tm.services.dto.task.TaskDTO;
+import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
+import com.taskmanager.tm.services.dto.task.TaskResponse;
 import com.taskmanager.tm.services.task.TaskService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,16 +23,15 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/tasks")
-    public ResponseEntity<String> createTask(@Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Void> createTask(@Valid @RequestBody CreateTaskDTO taskDTO) {
         log.debug("Post method, create task: {}", taskDTO);
-        Task newTask = this.taskService.createTask(taskDTO);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("New user: " + newTask.toString());
+        taskService.createTask(taskDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/tasks/all")
-    public ResponseEntity<List<TaskDTO>> getAllTasks(Pageable pageable) {
-        Page<TaskDTO> page = this.taskService.getAllTasks(pageable);
+    @GetMapping("/tasks")
+    public ResponseEntity<List<TaskResponse>> getAllTasks(Pageable pageable) {
+        Page<TaskResponse> page = taskService.getAllTasks(pageable);
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 }

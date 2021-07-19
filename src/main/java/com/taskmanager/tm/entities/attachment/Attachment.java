@@ -1,12 +1,11 @@
 package com.taskmanager.tm.entities.attachment;
 
-import com.sun.istack.NotNull;
 import com.taskmanager.tm.entities.task.Task;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "attachment")
@@ -19,7 +18,7 @@ public class Attachment {
     private Long id;
 
     @NotNull
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "name", length = 100)
     private String name;
 
     @Column(name = "url", length = 256)
@@ -29,16 +28,16 @@ public class Attachment {
     private String mimeType;
 
     @NotNull
-    @Column(name = "size", nullable = false)
+    @Column(name = "size")
     private long size;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
     private Task task;
 
-    public Attachment() { };
+    public Attachment() { }
 
-    public Attachment(String name, String url, String mimeType, long size) {
+    private Attachment(String name, String url, String mimeType, long size) {
         this.name = name;
         this.url = url;
         this.mimeType = mimeType;
@@ -54,5 +53,43 @@ public class Attachment {
                 ", mimeType='" + mimeType + '\'' +
                 ", size=" + size +
                 '}';
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String name;
+        private String url;
+        private String mimeType;
+        private long size;
+
+        private Builder() {
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder withMimeType(String mimeType) {
+            this.mimeType = mimeType;
+            return this;
+        }
+
+        public Builder withSize(long size) {
+            this.size = size;
+            return this;
+        }
+
+        public Attachment build() {
+            return new Attachment(name, url, mimeType, size);
+        }
     }
 }

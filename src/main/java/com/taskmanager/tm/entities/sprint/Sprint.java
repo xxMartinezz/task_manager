@@ -27,4 +27,7 @@ public class Sprint {
                     CascadeType.DETACH, CascadeType.REFRESH})
     private List<Task> tasks;
 
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
 }
