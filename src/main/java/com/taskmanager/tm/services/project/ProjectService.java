@@ -2,7 +2,8 @@ package com.taskmanager.tm.services.project;
 
 import com.taskmanager.tm.entities.project.Project;
 import com.taskmanager.tm.repositories.project.ProjectRepository;
-import com.taskmanager.tm.services.dto.project.ProjectDTO;
+import com.taskmanager.tm.services.dto.project.CreateProjectDTO;
+import com.taskmanager.tm.services.dto.project.ProjectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +23,21 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public Project createProject(ProjectDTO projectDTO) {
-        Project project = new Project();
-        project.setName(projectDTO.getName());
+    public Project createProject(CreateProjectDTO dto) {
+        Project project = ProjectConverter.toProject(dto);
         this.projectRepository.save(project);
         log.debug("Created project: {}", project);
         return project;
     }
 
-    public Page<ProjectDTO> getAllProjects(Pageable pageable) {
-        return this.projectRepository.findAll(pageable).map(ProjectDTO::new);
+    @Transactional
+    public Page<ProjectResponse> getAllProjects(Pageable pageable) {
+        return this.projectRepository.findAll(pageable)
+                .map(ProjectConverter::toProjectResponse);
     }
 
-    public Optional<ProjectDTO> getProjectById(Long id) {
-        return this.projectRepository.findById(id).map(ProjectDTO::new);
+    public Optional<ProjectResponse> getProjectById(Long id) {
+        return this.projectRepository.findById(id).map(ProjectConverter::toProjectResponse);
     }
 
     public void deleteProject(Long id) {

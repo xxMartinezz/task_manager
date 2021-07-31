@@ -6,7 +6,11 @@ import com.taskmanager.tm.services.dto.attachment.AttachmentDTO;
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskResponse;
 
-class TaskConverter {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class TaskConverter {
     static Task toTask(CreateTaskDTO dto) {
         return Task.builder()
                 .withName(dto.getName())
@@ -28,7 +32,7 @@ class TaskConverter {
                 .build();
     }
 
-    static TaskResponse toTaskResponse(Task task) {
+    public static TaskResponse toTaskResponse(Task task) {
         return TaskResponse.builder()
                 .id(task.getId())
                 .name(task.getName())
@@ -46,6 +50,17 @@ class TaskConverter {
                 .assignedUserId(task.getAssignedUser() != null ? task.getAssignedUser().getId() : null)
                 .attachments(task.getAttachments().stream().map(TaskConverter::toAttachmentDTO).toList())
                 .build();
+    }
+
+    public static List<TaskResponse> toTaskResponseList(List<Task> taskList) {
+        List<TaskResponse> taskResponseList = new ArrayList<>();
+        Iterator<Task> iterator = taskList.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            TaskResponse taskResponse = TaskConverter.toTaskResponse(task);
+            taskResponseList.add(taskResponse);
+        }
+        return taskResponseList;
     }
 
     private static AttachmentDTO toAttachmentDTO(Attachment attachment) {

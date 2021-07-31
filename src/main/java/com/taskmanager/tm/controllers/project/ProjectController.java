@@ -1,7 +1,8 @@
 package com.taskmanager.tm.controllers.project;
 
 import com.taskmanager.tm.entities.project.Project;
-import com.taskmanager.tm.services.dto.project.ProjectDTO;
+import com.taskmanager.tm.services.dto.project.CreateProjectDTO;
+import com.taskmanager.tm.services.dto.project.ProjectResponse;
 import com.taskmanager.tm.services.exceptions.RequestException;
 import com.taskmanager.tm.services.project.ProjectService;
 import org.slf4j.Logger;
@@ -28,30 +29,26 @@ public class ProjectController {
     private ProjectService projectService;
 
     @PostMapping("/projects")
-    public ResponseEntity<String> createProject(@Valid @RequestBody ProjectDTO projectDTO) throws URISyntaxException {
-        log.debug("Post method, create project: {}", projectDTO);
-        if (projectDTO.getId() != null) {
-            throw new RequestException("The new project cannot have an ID", "Project");
-        } else {
-            Project newProject = this.projectService.createProject(projectDTO);
+    public ResponseEntity<String> createProject(@Valid @RequestBody CreateProjectDTO dto) throws URISyntaxException {
+        log.debug("Post method, create project: {}", dto);
+            Project newProject = this.projectService.createProject(dto);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("New project: " + newProject.toString());
-        }
     }
 
     @GetMapping("/projects/all")
-    public ResponseEntity<List<ProjectDTO>> getAllProjects(Pageable pageable) {
-        Page<ProjectDTO> page = this.projectService.getAllProjects(pageable);
+    public ResponseEntity<List<ProjectResponse>> getAllProjects(Pageable pageable) {
+        Page<ProjectResponse> page = this.projectService.getAllProjects(pageable);
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/projects/{id}")
-    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable(name = "id") Long id) {
-        Optional<ProjectDTO> project = this.projectService.getProjectById(id);
+    public ResponseEntity<ProjectResponse> getProjectById(@PathVariable(name = "id") Long id) {
+        Optional<ProjectResponse> project = this.projectService.getProjectById(id);
         if (!project.isPresent()) {
             throw new RequestException("There is no project with ID " + id + " ", "Project");
         }
-        return new ResponseEntity<ProjectDTO>(project.get(), HttpStatus.OK);
+        return new ResponseEntity<ProjectResponse>(project.get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/projects/{id}")

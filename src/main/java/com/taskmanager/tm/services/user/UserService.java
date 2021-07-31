@@ -2,7 +2,8 @@ package com.taskmanager.tm.services.user;
 
 import com.taskmanager.tm.entities.user.User;
 import com.taskmanager.tm.repositories.user.UserRepository;
-import com.taskmanager.tm.services.dto.user.UserDTO;
+import com.taskmanager.tm.services.dto.user.CreateUserDTO;
+import com.taskmanager.tm.services.dto.user.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +27,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setSurname((userDTO.getSurname()));
-        user.setActive(true);
+    public void createUser(CreateUserDTO dto) {
+        User user = UserConverter.toUser(dto);
         this.userRepository.save(user);
         log.debug("Created user: {}", user);
-        return user;
     }
 
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        return this.userRepository.findAll(pageable).map(UserDTO::new);
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(UserConverter::toUserResponse);
     }
 
-    public Optional<UserDTO> getUserById(Long id) {
-        return this.userRepository.findById(id).map(UserDTO::new);
+    public Optional<UserResponse> getUserById(Long id) {
+        return this.userRepository.findById(id).map(UserConverter::toUserResponse);
     }
 
     public void deleteUser(Long id) {

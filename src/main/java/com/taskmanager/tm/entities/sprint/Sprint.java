@@ -2,7 +2,9 @@ package com.taskmanager.tm.entities.sprint;
 
 import com.sun.istack.NotNull;
 import com.taskmanager.tm.entities.task.Task;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import java.util.List;
 @Table(name = "sprint")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sprint {
 
     @Id
