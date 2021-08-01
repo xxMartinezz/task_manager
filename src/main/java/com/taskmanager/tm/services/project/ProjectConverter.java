@@ -16,7 +16,7 @@ public class ProjectConverter {
         return ProjectResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
-                .tasks(TaskConverter.toTaskResponseList(project.getTasks()))
+                .tasks(TaskConverter.toTaskResponses(project.getTasks()))
                 .build();
     }
 }

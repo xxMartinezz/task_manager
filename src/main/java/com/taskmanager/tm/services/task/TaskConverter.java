@@ -6,8 +6,6 @@ import com.taskmanager.tm.services.dto.attachment.AttachmentDTO;
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskResponse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TaskConverter {
@@ -52,14 +50,8 @@ public class TaskConverter {
                 .build();
     }
 
-    public static List<TaskResponse> toTaskResponseList(List<Task> taskList) {
-        List<TaskResponse> taskResponseList = new ArrayList<>();
-        Iterator<Task> iterator = taskList.iterator();
-        while (iterator.hasNext()) {
-            Task task = iterator.next();
-            TaskResponse taskResponse = TaskConverter.toTaskResponse(task);
-            taskResponseList.add(taskResponse);
-        }
+    public static List<TaskResponse> toTaskResponses(List<Task> taskList) {
+        List<TaskResponse> taskResponseList = taskList.stream().map(TaskConverter::toTaskResponse).toList();
         return taskResponseList;
     }
 

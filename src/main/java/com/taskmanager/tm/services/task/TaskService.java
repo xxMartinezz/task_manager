@@ -54,12 +54,14 @@ public class TaskService {
     private void assignToSprint(Task task, Long sprintId) {
         Sprint sprint = sprintRepository.findById(sprintId)
                 .orElseThrow(() -> new IllegalArgumentException("Sprint with id " + sprintId + " not found."));
+        task.setSprint(sprint);
         sprint.addTask(task);
     }
 
     private void assignToProject(CreateTaskDTO createTaskDTO, Task task) {
         Project project = projectRepository.findById(createTaskDTO.getProjectId())
                 .orElseThrow(() -> new IllegalArgumentException("Project with id " + createTaskDTO.getProjectId() + " not found."));
+        task.setProject(project);
         project.addTask(task);
     }
 
