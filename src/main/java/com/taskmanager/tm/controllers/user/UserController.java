@@ -2,6 +2,8 @@ package com.taskmanager.tm.controllers.user;
 
 import com.taskmanager.tm.repositories.user.UserRepository;
 import com.taskmanager.tm.services.dto.user.CreateUserDTO;
+import com.taskmanager.tm.services.dto.user.PaginatedUserListDTO;
+import com.taskmanager.tm.services.dto.user.UserFilterDTO;
 import com.taskmanager.tm.services.dto.user.UserResponse;
 import com.taskmanager.tm.services.exceptions.RequestException;
 import com.taskmanager.tm.services.user.UserService;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +42,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/users/all")
-    public ResponseEntity<List<UserResponse>> getAllUsers(Pageable pageable) {
-        Page<UserResponse> page = this.userService.getAllUsers(pageable);
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    @GetMapping("/users")
+    public ResponseEntity<PaginatedUserListDTO> getUsers(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "surname") String sortBy,
+            @ModelAttribute UserFilterDTO userFilter) {
+        PaginatedUserListDTO paginatedUserList = userService.getUsers(pageNumber, pageSize, sortBy, userFilter);
+        return new ResponseEntity<PaginatedUserListDTO>(paginatedUserList, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
