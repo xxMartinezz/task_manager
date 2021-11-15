@@ -4,7 +4,7 @@ In progress...
 
 # Technologies
 
-* Java 8
+* Java 16
 * MySQL database
 * Spring Boot
 
