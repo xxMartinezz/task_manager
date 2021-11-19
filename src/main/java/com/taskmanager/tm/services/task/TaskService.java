@@ -6,16 +6,20 @@ import com.taskmanager.tm.entities.sprint.Sprint;
 import com.taskmanager.tm.entities.task.Task;
 import com.taskmanager.tm.entities.user.User;
 import com.taskmanager.tm.repositories.project.ProjectRepository;
+import com.taskmanager.tm.repositories.specification.TaskSpecification;
 import com.taskmanager.tm.repositories.sprint.SprintRepository;
 import com.taskmanager.tm.repositories.task.TaskRepository;
 import com.taskmanager.tm.repositories.user.UserRepository;
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
-import com.taskmanager.tm.services.dto.task.TaskResponse;
+import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
+import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -92,8 +96,17 @@ public class TaskService {
     }
 
     @Transactional
-    public Page<TaskResponse> getAllTasks(Pageable pageable) {
-        return this.taskRepository.findAll(pageable)
-                .map(TaskConverter::toTaskResponse);
+    public PaginatedTaskListDTO getTasks(Integer pageNumber, Integer pageSize, String sortBy, TaskFilterDTO taskFilterDTO) {
+        log.debug("Getting filtered tasks");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        TaskSpecification taskSpecification = TaskSpecification.builder()
+                .filter(taskFilterDTO)
+                .build();
+        Page<Task> pageResult = taskRepository.findAll(taskSpecification, pageable);
+        return PaginatedTaskListDTO.builder()
+                .data(TaskConverter.toTaskResponses(pageResult.getContent()))
+                .count(pageResult.getTotalElements())
+                .pages(pageResult.getTotalPages())
+                .build();
     }
 }

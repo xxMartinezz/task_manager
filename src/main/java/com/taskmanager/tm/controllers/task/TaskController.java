@@ -1,18 +1,17 @@
 package com.taskmanager.tm.controllers.task;
 
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
-import com.taskmanager.tm.services.dto.task.TaskResponse;
+import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
+import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
 import com.taskmanager.tm.services.task.TaskService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,8 +29,12 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public ResponseEntity<List<TaskResponse>> getAllTasks(Pageable pageable) {
-        Page<TaskResponse> page = taskService.getAllTasks(pageable);
-        return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
+    public ResponseEntity<PaginatedTaskListDTO> getTasks(
+            @RequestParam(defaultValue = "0") Integer pageNumber,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "reportedDate") String sortBy,
+            @ModelAttribute TaskFilterDTO taskFilterDTO) {
+        PaginatedTaskListDTO paginatedTaskListDTO = taskService.getTasks(pageNumber, pageSize, sortBy, taskFilterDTO);
+        return new ResponseEntity<PaginatedTaskListDTO>(paginatedTaskListDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }
