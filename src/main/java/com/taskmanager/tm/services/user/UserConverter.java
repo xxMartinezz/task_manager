@@ -1,7 +1,7 @@
 package com.taskmanager.tm.services.user;
 
 import com.taskmanager.tm.entities.user.User;
-import com.taskmanager.tm.services.dto.user.CreateUserDTO;
+import com.taskmanager.tm.services.dto.user.UserDTO;
 import com.taskmanager.tm.services.dto.user.UserResponse;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 class UserConverter {
 
-    static User toUser(CreateUserDTO dto) {
+    static User toUser(UserDTO dto) {
         return User.builder()
                 .withName(dto.getName())
                 .withSurname(dto.getSurname())

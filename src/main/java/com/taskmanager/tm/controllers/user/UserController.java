@@ -1,7 +1,7 @@
 package com.taskmanager.tm.controllers.user;
 
 import com.taskmanager.tm.repositories.user.UserRepository;
-import com.taskmanager.tm.services.dto.user.CreateUserDTO;
+import com.taskmanager.tm.services.dto.user.UserDTO;
 import com.taskmanager.tm.services.dto.user.PaginatedUserListDTO;
 import com.taskmanager.tm.services.dto.user.UserFilterDTO;
 import com.taskmanager.tm.services.dto.user.UserResponse;
@@ -34,10 +34,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserDTO userDTO) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserDTO userDTO) {
         log.debug("Post method, create user: {}", userDTO);
         userService.createUser(userDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody UserDTO userDTO) {
+        log.debug("Put method, update user: {}", userDTO);
+        userService.updateUser(userDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("")

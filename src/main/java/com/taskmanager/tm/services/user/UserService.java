@@ -3,10 +3,11 @@ package com.taskmanager.tm.services.user;
 import com.taskmanager.tm.entities.user.User;
 import com.taskmanager.tm.repositories.specification.UserSpecification;
 import com.taskmanager.tm.repositories.user.UserRepository;
-import com.taskmanager.tm.services.dto.user.CreateUserDTO;
+import com.taskmanager.tm.services.dto.user.UserDTO;
 import com.taskmanager.tm.services.dto.user.PaginatedUserListDTO;
 import com.taskmanager.tm.services.dto.user.UserFilterDTO;
 import com.taskmanager.tm.services.dto.user.UserResponse;
+import com.taskmanager.tm.services.exceptions.RequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,35 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void createUser(CreateUserDTO dto) {
+    public void createUser(UserDTO dto) {
         User user = UserConverter.toUser(dto);
-        this.userRepository.save(user);
+        userRepository.save(user);
         log.debug("Created user: {}", user);
+    }
+
+    public void updateUser(UserDTO userDTO) throws RequestException {
+        validateUserId(userDTO);
+        updateAndSaveUser(userDTO);
+    }
+
+    private void validateUserId(UserDTO userDTO) throws RequestException {
+        if (userDTO.getId() == null) {
+            throw new RequestException("There is no id in sent json", "User");
+        }
+    }
+
+    private void updateAndSaveUser(UserDTO userDTO) {
+        User user = userRepository.getById(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        user.setActive(userDTO.isActive());
+        userRepository.save(user);
     }
 
     public PaginatedUserListDTO getUsers(Integer pageNumber, Integer pageSize, String sortBy, UserFilterDTO userFilter) {
@@ -54,7 +74,7 @@ public class UserService {
     }
 
     public Optional<UserResponse> getUserById(Long id) {
-        return this.userRepository.findById(id).map(UserConverter::toUserResponse);
+        return userRepository.findById(id).map(UserConverter::toUserResponse);
     }
 
     public List<UserResponse> fetchUsersByNameOrSurname(String nameOrSurname) {
@@ -64,9 +84,10 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        this.userRepository.findById(id).ifPresent(user -> {
-            this.userRepository.deleteById(id);
+        userRepository.findById(id).ifPresent(user -> {
+            userRepository.deleteById(id);
             log.debug("Deleted user: {}", user);
         });
     }
+
 }
