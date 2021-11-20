@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,6 +55,12 @@ public class UserService {
 
     public Optional<UserResponse> getUserById(Long id) {
         return this.userRepository.findById(id).map(UserConverter::toUserResponse);
+    }
+
+    public List<UserResponse> fetchUsersByNameOrSurname(String nameOrSurname) {
+        log.debug("Getting users by name or surname {}", nameOrSurname);
+        List<User> users = userRepository.findUsersByName(nameOrSurname);
+        return UserConverter.toUserResponseList(users);
     }
 
     public void deleteUser(Long id) {

@@ -15,26 +15,26 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/tasks")
 @AllArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
-    @PostMapping("/tasks")
+    @PostMapping("")
     public ResponseEntity<Void> createTask(@Valid @RequestBody CreateTaskDTO taskDTO) {
         log.debug("Post method, create task: {}", taskDTO);
         taskService.createTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("")
     public ResponseEntity<PaginatedTaskListDTO> getTasks(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "reportedDate") String sortBy,
             @ModelAttribute TaskFilterDTO taskFilterDTO) {
         PaginatedTaskListDTO paginatedTaskListDTO = taskService.getTasks(pageNumber, pageSize, sortBy, taskFilterDTO);
-        return new ResponseEntity<PaginatedTaskListDTO>(paginatedTaskListDTO, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(paginatedTaskListDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }
