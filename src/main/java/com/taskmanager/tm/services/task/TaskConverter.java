@@ -4,7 +4,7 @@ import com.taskmanager.tm.entities.attachment.Attachment;
 import com.taskmanager.tm.entities.task.Task;
 import com.taskmanager.tm.services.dto.attachment.AttachmentDTO;
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
-import com.taskmanager.tm.services.dto.task.TaskResponse;
+import com.taskmanager.tm.services.dto.task.TaskDTO;
 
 import java.util.List;
 
@@ -30,8 +30,8 @@ public class TaskConverter {
                 .build();
     }
 
-    public static TaskResponse toTaskResponse(Task task) {
-        return TaskResponse.builder()
+    public static TaskDTO toTaskDTO(Task task) {
+        return TaskDTO.builder()
                 .id(task.getId())
                 .name(task.getName())
                 .taskType(task.getTaskType())
@@ -50,9 +50,8 @@ public class TaskConverter {
                 .build();
     }
 
-    public static List<TaskResponse> toTaskResponses(List<Task> taskList) {
-        List<TaskResponse> taskResponseList = taskList.stream().map(TaskConverter::toTaskResponse).toList();
-        return taskResponseList;
+    public static List<TaskDTO> toTaskDTOList(List<Task> taskList) {
+        return taskList.stream().map(TaskConverter::toTaskDTO).toList();
     }
 
     private static AttachmentDTO toAttachmentDTO(Attachment attachment) {

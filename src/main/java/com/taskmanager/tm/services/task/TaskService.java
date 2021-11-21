@@ -12,6 +12,7 @@ import com.taskmanager.tm.repositories.task.TaskRepository;
 import com.taskmanager.tm.repositories.user.UserRepository;
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
+import com.taskmanager.tm.services.dto.task.TaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -104,9 +106,13 @@ public class TaskService {
                 .build();
         Page<Task> pageResult = taskRepository.findAll(taskSpecification, pageable);
         return PaginatedTaskListDTO.builder()
-                .data(TaskConverter.toTaskResponses(pageResult.getContent()))
+                .data(TaskConverter.toTaskDTOList(pageResult.getContent()))
                 .count(pageResult.getTotalElements())
                 .pages(pageResult.getTotalPages())
                 .build();
+    }
+
+    public Optional<TaskDTO> getTask(Long id) {
+        return taskRepository.findById(id).map(TaskConverter::toTaskDTO);
     }
 }

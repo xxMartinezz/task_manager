@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class PaginatedTaskListDTO {
-    private List<TaskResponse> data;
+    private List<TaskDTO> data;
     private Long count;
     private int pages;
 }

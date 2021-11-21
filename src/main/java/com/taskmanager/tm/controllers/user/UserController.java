@@ -1,8 +1,7 @@
 package com.taskmanager.tm.controllers.user;
 
-import com.taskmanager.tm.repositories.user.UserRepository;
-import com.taskmanager.tm.services.dto.user.UserDTO;
 import com.taskmanager.tm.services.dto.user.PaginatedUserListDTO;
+import com.taskmanager.tm.services.dto.user.UserDTO;
 import com.taskmanager.tm.services.dto.user.UserFilterDTO;
 import com.taskmanager.tm.services.dto.user.UserResponse;
 import com.taskmanager.tm.services.exceptions.RequestException;
@@ -26,9 +25,6 @@ import java.util.Optional;
 public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private final UserService userService;
@@ -61,7 +57,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserById(@PathVariable(name = "id") Long id) {
         Optional<UserResponse> user = userService.getUserById(id);
         if (!user.isPresent()) {
-            throw new RequestException("There is no user with ID " + id + " ", "User");
+            throw new RequestException("There is no user with id " + id, "User");
         }
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class TaskResponse {
+public class TaskDTO {
     Long id;
     String name;
     TaskType taskType;

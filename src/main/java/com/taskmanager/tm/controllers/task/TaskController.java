@@ -2,7 +2,9 @@ package com.taskmanager.tm.controllers.task;
 
 import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
+import com.taskmanager.tm.services.dto.task.TaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
+import com.taskmanager.tm.services.exceptions.RequestException;
 import com.taskmanager.tm.services.task.TaskService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -36,5 +39,14 @@ public class TaskController {
             @ModelAttribute TaskFilterDTO taskFilterDTO) {
         PaginatedTaskListDTO paginatedTaskListDTO = taskService.getTasks(pageNumber, pageSize, sortBy, taskFilterDTO);
         return new ResponseEntity<>(paginatedTaskListDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable(name = "id") Long id) {
+        Optional<TaskDTO> task = taskService.getTask(id);
+        if (!task.isPresent()) {
+            throw new RequestException("There is no task with id " + id, "User");
+        }
+        return new ResponseEntity<>(task.get(), HttpStatus.OK);
     }
 }

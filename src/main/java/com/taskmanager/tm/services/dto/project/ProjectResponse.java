@@ -1,6 +1,6 @@
 package com.taskmanager.tm.services.dto.project;
 
-import com.taskmanager.tm.services.dto.task.TaskResponse;
+import com.taskmanager.tm.services.dto.task.TaskDTO;
 import lombok.Builder;
 import lombok.Value;
 
@@ -11,5 +11,5 @@ import java.util.List;
 public class ProjectResponse {
     Long id;
     String name;
-    List<TaskResponse> tasks;
+    List<TaskDTO> tasks;
 }
