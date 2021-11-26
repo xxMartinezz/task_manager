@@ -26,9 +26,16 @@ public class TaskController {
 
     @PostMapping("")
     public ResponseEntity<Void> createTask(@Valid @RequestBody CreateTaskDTO taskDTO) {
-        log.debug("Post method, create task: {}", taskDTO);
+        log.debug("Creating task: {}", taskDTO);
         taskService.createTask(taskDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<TaskDTO> updateTask(@Valid @RequestBody TaskDTO taskDTO) {
+        log.debug("Updating task: {}", taskDTO);
+        taskService.updateTask(taskDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -45,7 +52,7 @@ public class TaskController {
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable(name = "id") Long id) {
         Optional<TaskDTO> task = taskService.getTask(id);
         if (!task.isPresent()) {
-            throw new RequestException("There is no task with id " + id, "User");
+            throw new RequestException("There is no task with id " + id, "Task");
         }
         return new ResponseEntity<>(task.get(), HttpStatus.OK);
     }

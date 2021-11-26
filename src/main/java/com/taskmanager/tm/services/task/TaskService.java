@@ -14,6 +14,8 @@ import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
 import com.taskmanager.tm.services.dto.task.TaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
+import com.taskmanager.tm.services.dto.user.UserDTO;
+import com.taskmanager.tm.services.exceptions.RequestException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +23,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,6 +88,13 @@ public class TaskService {
         }
     }
 
+    private void assignAssignedUserIfGiven(TaskDTO dto, Task task) {
+        Long assignedUserId = dto.getAssignedUserId();
+        if (assignedUserId != null) {
+            assignAssignedUser(task, assignedUserId);
+        }
+    }
+
     private void assignAssignedUser(Task task, Long assignedUserId) {
         User assignedUser = userRepository.findById(assignedUserId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + assignedUserId + " not found."));
@@ -95,6 +106,36 @@ public class TaskService {
                 .map(TaskConverter::toAttachment)
                 .toList();
         task.setAttachments(attachments);
+    }
+
+    private void assignAttachments(TaskDTO dto, Task task) {
+        List<Attachment> attachments = dto.getAttachments().stream()
+                .map(TaskConverter::toAttachment)
+                .toList();
+        task.setAttachments(attachments);
+    }
+
+    @Transactional
+    public void updateTask(TaskDTO taskDTO) {
+        Task taskToUpdate = taskRepository.findById(taskDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskDTO.getId() + " not found."));
+        updateAndSaveTask(taskToUpdate, taskDTO);
+    }
+
+    private void updateAndSaveTask(Task taskToUpdate, TaskDTO taskDTO) {
+        log.debug("Updating task with id {}", taskToUpdate.getId());
+        taskToUpdate.setName(taskDTO.getName());
+        taskToUpdate.setTaskType(taskDTO.getTaskType());
+        taskToUpdate.setComponent(taskDTO.getComponent());
+        taskToUpdate.setDescription(taskDTO.getDescription());
+        taskToUpdate.setPriority(taskDTO.getPriority());
+        taskToUpdate.setEstimatedTime(taskDTO.getEstimatedTime());
+        taskToUpdate.setDeadlineDate(taskDTO.getDeadlineDate());
+        taskToUpdate.setLastChangeDate(LocalDateTime.now());
+        taskToUpdate.setLoggedTime(taskDTO.getLoggedTime());
+        taskToUpdate.setTaskStatus(taskDTO.getTaskStatus());
+        assignAssignedUserIfGiven(taskDTO, taskToUpdate);
+        assignAttachments(taskDTO, taskToUpdate);
     }
 
     @Transactional
@@ -112,6 +153,7 @@ public class TaskService {
                 .build();
     }
 
+    @Transactional
     public Optional<TaskDTO> getTask(Long id) {
         return taskRepository.findById(id).map(TaskConverter::toTaskDTO);
     }
