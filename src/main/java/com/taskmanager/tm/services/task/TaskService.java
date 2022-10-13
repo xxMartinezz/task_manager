@@ -14,8 +14,6 @@ import com.taskmanager.tm.services.dto.task.CreateTaskDTO;
 import com.taskmanager.tm.services.dto.task.PaginatedTaskListDTO;
 import com.taskmanager.tm.services.dto.task.TaskDTO;
 import com.taskmanager.tm.services.dto.task.TaskFilterDTO;
-import com.taskmanager.tm.services.dto.user.UserDTO;
-import com.taskmanager.tm.services.exceptions.RequestException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,6 +37,8 @@ public class TaskService {
     private final UserRepository userRepository;
     private final SprintRepository sprintRepository;
     private final ProjectRepository projectRepository;
+
+    private static final String NOT_FOUND = " not found.";
 
     @Transactional
     public void createTask(CreateTaskDTO dto) {
@@ -63,21 +62,21 @@ public class TaskService {
 
     private void assignToSprint(Task task, Long sprintId) {
         Sprint sprint = sprintRepository.findById(sprintId)
-                .orElseThrow(() -> new IllegalArgumentException("Sprint with id " + sprintId + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Sprint with id " + sprintId + NOT_FOUND));
         task.setSprint(sprint);
         sprint.addTask(task);
     }
 
     private void assignToProject(CreateTaskDTO createTaskDTO, Task task) {
         Project project = projectRepository.findById(createTaskDTO.getProjectId())
-                .orElseThrow(() -> new IllegalArgumentException("Project with id " + createTaskDTO.getProjectId() + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Project with id " + createTaskDTO.getProjectId() + NOT_FOUND));
         task.setProject(project);
         project.addTask(task);
     }
 
     private void assignReportedUser(CreateTaskDTO dto, Task task) {
         User reportedUser = userRepository.findById(dto.getReportedUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + dto.getReportedUserId() + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + dto.getReportedUserId() + NOT_FOUND));
         task.setReportedUser(reportedUser);
     }
 
@@ -97,7 +96,7 @@ public class TaskService {
 
     private void assignAssignedUser(Task task, Long assignedUserId) {
         User assignedUser = userRepository.findById(assignedUserId)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + assignedUserId + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + assignedUserId + NOT_FOUND));
         task.setAssignedUser(assignedUser);
     }
 
@@ -118,7 +117,7 @@ public class TaskService {
     @Transactional
     public void updateTask(TaskDTO taskDTO) {
         Task taskToUpdate = taskRepository.findById(taskDTO.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskDTO.getId() + " not found."));
+                .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskDTO.getId() + NOT_FOUND));
         updateAndSaveTask(taskToUpdate, taskDTO);
     }
 

@@ -1,6 +1,5 @@
 package com.taskmanager.tm.entities.user;
 
-import com.taskmanager.tm.entities.task.Task;
 import lombok.Getter;
 import lombok.Setter;
 

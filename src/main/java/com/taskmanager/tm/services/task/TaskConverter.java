@@ -9,6 +9,9 @@ import com.taskmanager.tm.services.dto.task.TaskDTO;
 import java.util.List;
 
 public class TaskConverter {
+
+    private TaskConverter() {}
+
     static Task toTask(CreateTaskDTO dto) {
         return Task.builder()
                 .withName(dto.getName())

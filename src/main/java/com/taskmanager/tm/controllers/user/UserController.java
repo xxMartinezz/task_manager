@@ -7,8 +7,7 @@ import com.taskmanager.tm.services.dto.user.UserResponse;
 import com.taskmanager.tm.services.exceptions.RequestException;
 import com.taskmanager.tm.services.user.UserService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,12 +18,11 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
 public class UserController {
-
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private final UserService userService;
@@ -50,7 +48,7 @@ public class UserController {
             @RequestParam(defaultValue = "surname") String sortBy,
             @ModelAttribute UserFilterDTO userFilter) {
         PaginatedUserListDTO paginatedUserList = userService.getUsers(pageNumber, pageSize, sortBy, userFilter);
-        return new ResponseEntity<PaginatedUserListDTO>(paginatedUserList, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(paginatedUserList, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -15,8 +15,11 @@ import javax.persistence.criteria.Root;
 @Builder
 public class TaskSpecification implements Specification {
 
-    private final TaskFilterDTO filter;
+    private final transient TaskFilterDTO filter;
     private static final String LIKE = "%";
+    private static final String TASK_TYPE = "taskType";
+    private static final String PRIORITY = "priority";
+    private static final String TASK_STATUS = "taskStatus";
 
     @Override
     public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -29,17 +32,13 @@ public class TaskSpecification implements Specification {
         }
 
         if (filter.getTaskType() != null) {
-            if (filter.getTaskType() == TaskType.ASSIGNMENT) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskType"), TaskType.ASSIGNMENT));
-            }
-            if (filter.getTaskType() == TaskType.BLOCKER) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskType"), TaskType.BLOCKER));
-            }
-            if (filter.getTaskType() == TaskType.BUG) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskType"), TaskType.BUG));
+            switch (filter.getTaskType()) {
+                case ASSIGNMENT -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_TYPE), TaskType.ASSIGNMENT));
+                case BLOCKER -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_TYPE), TaskType.BLOCKER));
+                case BUG -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_TYPE), TaskType.BUG));
             }
         }
 
@@ -54,25 +53,17 @@ public class TaskSpecification implements Specification {
         }
 
         if (filter.getPriority() != null) {
-            if (filter.getPriority() == Priority.HIGH) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("priority"), Priority.HIGH));
-            }
-            if (filter.getPriority() == Priority.HIGHEST) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("priority"), Priority.HIGHEST));
-            }
-            if (filter.getPriority() == Priority.MEDIUM) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("priority"), Priority.MEDIUM));
-            }
-            if (filter.getPriority() == Priority.LOW) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("priority"), Priority.LOW));
-            }
-            if (filter.getPriority() == Priority.LOWEST) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("priority"), Priority.LOWEST));
+            switch(filter.getPriority()) {
+                case HIGH -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(PRIORITY), Priority.HIGH));
+                case HIGHEST -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(PRIORITY), Priority.HIGHEST));
+                case MEDIUM -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(PRIORITY), Priority.MEDIUM));
+                case LOW -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(PRIORITY), Priority.LOW));
+                case LOWEST -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(PRIORITY), Priority.LOWEST));
             }
         }
 
@@ -122,29 +113,19 @@ public class TaskSpecification implements Specification {
         }
 
         if (filter.getTaskStatus() != null) {
-            if (filter.getTaskStatus() == TaskStatus.NEW) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.NEW));
-            }
-            if (filter.getTaskStatus() == TaskStatus.ARCHIVED) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.ARCHIVED));
-            }
-            if (filter.getTaskStatus() == TaskStatus.FAILED) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.FAILED));
-            }
-            if (filter.getTaskStatus() == TaskStatus.IN_PROGRESS) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.IN_PROGRESS));
-            }
-            if (filter.getTaskStatus() == TaskStatus.IN_TEST) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.IN_TEST));
-            }
-            if (filter.getTaskStatus() == TaskStatus.RESOLVED) {
-                predicate.getExpressions()
-                        .add(criteriaBuilder.equal(root.get("taskStatus"), TaskStatus.RESOLVED));
+            switch(filter.getTaskStatus()) {
+                case NEW -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.NEW));
+                case ARCHIVED -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.ARCHIVED));
+                case FAILED -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.FAILED));
+                case IN_PROGRESS -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.IN_PROGRESS));
+                case IN_TEST -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.IN_TEST));
+                case RESOLVED -> predicate.getExpressions()
+                        .add(criteriaBuilder.equal(root.get(TASK_STATUS), TaskStatus.RESOLVED));
             }
         }
 

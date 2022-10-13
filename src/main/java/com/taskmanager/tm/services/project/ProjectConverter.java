@@ -7,9 +7,10 @@ import com.taskmanager.tm.services.task.TaskConverter;
 
 public class ProjectConverter {
 
+    private ProjectConverter() {}
+
     static Project toProject(CreateProjectDTO dto) {
-        Project project = new Project(dto.getName());
-        return project;
+        return new Project(dto.getName());
     }
 
     static ProjectResponse toProjectResponse(Project project) {

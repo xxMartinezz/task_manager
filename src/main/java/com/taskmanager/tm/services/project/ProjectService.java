@@ -1,7 +1,6 @@
 package com.taskmanager.tm.services.project;
 
 import com.taskmanager.tm.entities.project.Project;
-import com.taskmanager.tm.entities.sprint.Sprint;
 import com.taskmanager.tm.entities.task.Task;
 import com.taskmanager.tm.repositories.project.ProjectRepository;
 import com.taskmanager.tm.repositories.task.TaskRepository;
@@ -11,8 +10,6 @@ import com.taskmanager.tm.services.exceptions.RequestException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

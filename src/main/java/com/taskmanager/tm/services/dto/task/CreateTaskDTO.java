@@ -5,8 +5,6 @@ import com.taskmanager.tm.enums.TaskType;
 import com.taskmanager.tm.services.dto.attachment.AttachmentDTO;
 import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;

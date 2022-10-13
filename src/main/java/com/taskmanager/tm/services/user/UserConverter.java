@@ -6,9 +6,10 @@ import com.taskmanager.tm.services.dto.user.UserResponse;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 class UserConverter {
+
+    private UserConverter() {}
 
     static User toUser(UserDTO dto) {
         return User.builder()
@@ -30,7 +31,7 @@ class UserConverter {
     static List<UserResponse> toUserResponseList(List<User> users) {
         return users.stream()
                 .filter(Objects::nonNull)
-                .map(user -> toUserResponse(user))
-                .collect(Collectors.toList());
+                .map(UserConverter::toUserResponse)
+                .toList();
     }
 }

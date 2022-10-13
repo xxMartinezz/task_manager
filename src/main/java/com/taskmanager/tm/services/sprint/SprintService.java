@@ -3,8 +3,7 @@ package com.taskmanager.tm.services.sprint;
 import com.taskmanager.tm.entities.sprint.Sprint;
 import com.taskmanager.tm.repositories.sprint.SprintRepository;
 import com.taskmanager.tm.services.dto.sprint.SprintDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +12,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 public class SprintService {
-
-    private final Logger log = LoggerFactory.getLogger(SprintService.class);
 
     @Autowired
     private SprintRepository sprintRepository;

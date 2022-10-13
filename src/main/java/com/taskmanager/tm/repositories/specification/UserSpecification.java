@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 @Builder
 public class UserSpecification implements Specification {
 
-    private final UserFilterDTO filter;
+    private final transient UserFilterDTO filter;
     private static final String LIKE = "%";
 
     @Override
