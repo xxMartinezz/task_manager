@@ -18,13 +18,13 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/sprints")
 public class SprintController {
 
     @Autowired
     private SprintService sprintService;
 
-    @PostMapping("/sprints")
+    @PostMapping("")
     public ResponseEntity<String> createSprint(@Valid @RequestBody SprintDTO sprintDTO) {
         log.debug("Post method, create sprint: {}", sprintDTO);
         if (sprintDTO.getId() != null) {
@@ -36,13 +36,13 @@ public class SprintController {
         }
     }
 
-    @GetMapping("/sprints/all")
+    @GetMapping("/all")
     public ResponseEntity<List<SprintDTO>> getAllSprints(Pageable pageable) {
         Page<SprintDTO> page = this.sprintService.getAllSprints(pageable);
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 
-    @GetMapping("/sprints/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SprintDTO> getSprintById(@PathVariable(name = "id") Long id) {
         Optional<SprintDTO> sprint = this.sprintService.getSprintById(id);
         if (sprint.isEmpty()) {
@@ -51,7 +51,7 @@ public class SprintController {
         return new ResponseEntity<>(sprint.get(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/sprints/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSprint(@PathVariable(name = "id") Long id) {
         this.sprintService.deleteSprint(id);
         return ResponseEntity.status(HttpStatus.OK)

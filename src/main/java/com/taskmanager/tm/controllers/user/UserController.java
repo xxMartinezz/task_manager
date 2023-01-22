@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 

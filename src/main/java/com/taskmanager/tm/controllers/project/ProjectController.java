@@ -19,13 +19,13 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/projects")
 public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/projects")
+    @PostMapping("")
     public ResponseEntity<String> createProject(@Valid @RequestBody CreateProjectDTO dto) {
         log.debug("Post method, create project: {}", dto);
             Project newProject = this.projectService.createProject(dto);
@@ -33,13 +33,13 @@ public class ProjectController {
                     .body("New project: " + newProject.toString());
     }
 
-    @GetMapping("/projects/all")
+    @GetMapping("/all")
     public ResponseEntity<List<ProjectResponse>> getAllProjects(Pageable pageable) {
         Page<ProjectResponse> page = this.projectService.getAllProjects(pageable);
         return new ResponseEntity<>(page.getContent(), HttpStatus.OK);
     }
 
-    @GetMapping("/projects/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(@PathVariable(name = "id") Long id) {
         Optional<ProjectResponse> project = this.projectService.getProjectById(id);
         if (project.isEmpty()) {
@@ -48,7 +48,7 @@ public class ProjectController {
         return new ResponseEntity<>(project.get(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/projects/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProject(@PathVariable(name = "id") Long id) {
         this.projectService.deleteProject(id);
         return ResponseEntity.status(HttpStatus.OK)

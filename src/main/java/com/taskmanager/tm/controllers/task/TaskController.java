@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @AllArgsConstructor
 public class TaskController {
 
