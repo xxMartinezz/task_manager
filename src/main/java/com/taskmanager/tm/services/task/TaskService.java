@@ -138,9 +138,9 @@ public class TaskService {
     }
 
     @Transactional
-    public PaginatedTaskListDTO getTasks(Integer pageNumber, Integer pageSize, String sortBy, TaskFilterDTO taskFilterDTO) {
+    public PaginatedTaskListDTO getTasks(Integer pageNumber, Integer pageSize, String sortBy, String sortDir, TaskFilterDTO taskFilterDTO) {
         log.debug("Getting filtered tasks");
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortDir.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending());
         TaskSpecification taskSpecification = TaskSpecification.builder()
                 .filter(taskFilterDTO)
                 .build();

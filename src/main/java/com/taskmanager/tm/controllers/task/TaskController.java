@@ -43,8 +43,9 @@ public class TaskController {
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "reportedDate") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
             @ModelAttribute TaskFilterDTO taskFilterDTO) {
-        PaginatedTaskListDTO paginatedTaskListDTO = taskService.getTasks(pageNumber, pageSize, sortBy, taskFilterDTO);
+        PaginatedTaskListDTO paginatedTaskListDTO = taskService.getTasks(pageNumber, pageSize, sortBy, sortDir, taskFilterDTO);
         return new ResponseEntity<>(paginatedTaskListDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
