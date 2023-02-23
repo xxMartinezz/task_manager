@@ -18,8 +18,10 @@ public class TaskFilterDTO {
     private String component;
     private String description;
     private Priority priority;
-    private LocalDateTime deadlineDate;
-    private LocalDateTime reportedDate;
+    private LocalDateTime deadlineDateFrom;
+    private LocalDateTime deadlineDateTo;
+    private LocalDateTime reportedDateFrom;
+    private LocalDateTime reportedDateTo;
     private LocalDateTime lastChangeDate;
     private String estimatedTime;
     private String loggedTime;

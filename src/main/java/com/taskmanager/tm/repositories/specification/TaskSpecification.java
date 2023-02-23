@@ -67,20 +67,20 @@ public class TaskSpecification implements Specification {
             }
         }
 
-        if (filter.getDeadlineDate() != null) {
+        if (filter.getDeadlineDateFrom() != null || filter.getDeadlineDateTo() != null) {
             Predicate fromDate =
-                    criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate"), filter.getDeadlineDate());
+                    criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate"), filter.getDeadlineDateFrom());
             Predicate toDate =
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate"), filter.getDeadlineDate());
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate"), filter.getDeadlineDateTo());
             predicate.getExpressions()
                     .add(criteriaBuilder.and(fromDate, toDate));
         }
 
-        if (filter.getReportedDate() != null) {
+        if (filter.getReportedDateFrom() != null || filter.getReportedDateTo() != null) {
             Predicate fromDate =
-                    criteriaBuilder.lessThanOrEqualTo(root.get("reportedDate"), filter.getReportedDate());
+                    criteriaBuilder.lessThanOrEqualTo(root.get("reportedDate"), filter.getReportedDateFrom());
             Predicate toDate =
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("reportedDate"), filter.getReportedDate());
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("reportedDate"), filter.getReportedDateTo());
             predicate.getExpressions()
                     .add(criteriaBuilder.and(fromDate, toDate));
         }
